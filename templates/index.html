@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Password Generator | Farell Kurniawan</title>
+  <link rel="manifest" href="{{ url_for('static', filename='manifest.json') }}">
+  <meta name="theme-color" content="#2196F3">
+  <link rel="icon" href="{{ url_for('static', filename='icon-512.png') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+  <div class="container">
+    <header>
+      <h1>Password Generator</h1>
+      <p>SHA-256 • Aman • Android-style</p>
+    </header>
+
+    <form method="POST">
+      <label>Input Dasar:</label>
+      <input type="text" name="base" required placeholder="Contoh: SARI">
+      
+      <label>Panjang (8–16):</label>
+      <input type="number" name="length" min="8" max="16" value="12">
+      
+      <button type="submit">🔒 Buat Password</button>
+    </form>
+
+    {% if password %}
+    <section class="result">
+      <div>
+        <label>Password:</label>
+        <div class="output-group">
+          <span id="password">{{ password }}</span>
+          <button type="button" onclick="copyToClipboard('password')">Salin</button>
+        </div>
+      </div>
+      <div>
+        <label>SHA-256 Hash:</label>
+        <div class="output-group">
+          <code id="hash">{{ hash_pw }}</code>
+          <button type="button" onclick="copyToClipboard('hash')">Salin</button>
+        </div>
+      </div>
+    </section>
+    {% endif %}
+
+    <footer>
+      Dibuat oleh <strong>Farell Kurniawan</strong> © 2025
+    </footer>
+  </div>
+
+  <script>
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('/static/service-worker.js')
+        .then(() => console.log("Service Worker Registered"));
+    }
+
+    function copyToClipboard(id) {
+      const text = document.getElementById(id).innerText;
+      navigator.clipboard.writeText(text)
+        .then(() => alert("✅ Disalin ke clipboard"))
+        .catch(() => alert("❌ Gagal menyalin"));
+    }
+  </script>
+</body>
+</html>
